@@ -1,0 +1,13 @@
+﻿Build started 11-Feb-14 13:41:45.
+     1>Project "G:\Laptop_backup\WP\Labs\lab#1\source\WP_Lab1\WP_Lab1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"G:\Laptop_backup\WP\Labs\lab#1\source\..\temp\\" /Fd"G:\Laptop_backup\WP\Labs\lab#1\source\..\temp\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt winmain.cpp
+         winmain.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\Laptop_backup\WP\Labs\lab#1\source\..\build\Debug\WP_Lab1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"G:\Laptop_backup\WP\Labs\lab#1\source\..\build\Debug\WP_Lab1.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\Laptop_backup\WP\Labs\lab#1\source\..\build\Debug\WP_Lab1.lib" /MACHINE:X86 "G:\Laptop_backup\WP\Labs\lab#1\source\..\temp\winmain.obj"
+         WP_Lab1.vcxproj -> G:\Laptop_backup\WP\Labs\lab#1\source\..\build\Debug\WP_Lab1.exe
+     1>Done Building Project "G:\Laptop_backup\WP\Labs\lab#1\source\WP_Lab1\WP_Lab1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.72
