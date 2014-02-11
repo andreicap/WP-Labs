@@ -53,12 +53,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 
 	AdjustWindowRectEx(&rct, WS_OVERLAPPEDWINDOW, FALSE, WS_EX_OVERLAPPEDWINDOW);
 
-	cout << rct.left << endl;
-	cout << rct.top << endl;
-	cout << rct.right << endl;
-	cout << rct.bottom << endl;
-
-
 	hWnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW,
 							mainWinClassName,
 							L"WP Lab 1",
@@ -69,12 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 							hInstance,
 							NULL);
 
-	GetClientRect(hWnd, &rct);
 
-	cout << rct.left << endl;
-	cout << rct.top << endl;
-	cout << rct.right << endl;
-	cout << rct.bottom << endl;
 
 	if (!hWnd)
 	{
@@ -82,11 +71,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 		return 0;
 	}
 
-
-	HFONT hf = CreateFont(20, 0, 0, 0, 0, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Calibri");
-
-	SendMessage(hWnd, WM_SETFONT, (WPARAM)hf, TRUE);
-	
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
@@ -98,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 		DispatchMessage(&msg);
 	}
 
-	DeleteObject(hf);
+	
 
 
 	return msg.wParam;
@@ -107,6 +91,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 
 LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	static HFONT hFont;
+
 
 	switch (message)
 	{
@@ -136,35 +122,72 @@ LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 							hWnd, (HMENU)DEFAULT_EDIT, hInctance, NULL);
 
 
-			CreateWindowEx(WS_EX_CLIENTEDGE,
+			CreateWindowEx(WS_EX_STATICEDGE,
 							L"STATIC", L"Enhanced Stuff:",
 							WS_CHILD|WS_VISIBLE|SS_CENTER,
 							220, 20, 150, 23,
 							hWnd, (HMENU)ENHANCED_STATIC, hInctance, NULL);
 
 
-			CreateWindow(L"BUTTON", L"Cool Button",
-							WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON|BS_FLAT,
+			CreateWindowEx(WS_EX_TRANSPARENT,
+							L"BUTTON", L"Cool Button",
+							WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON,
 							220, 70, 150, 30,
 							hWnd, (HMENU)ENHANCED_BUTTON, hInctance, NULL);
 
 
-			CreateWindowEx(WS_EX_CLIENTEDGE,
+			CreateWindowEx(WS_EX_STATICEDGE,
 							L"EDIT", L"",
 							WS_CHILD|WS_VISIBLE,
 							220, 130, 150, 23,
 							hWnd, (HMENU)ENHANCED_EDIT, hInctance, NULL);
 
+
+			hFont = CreateFont(20, 0, 0, 0, 0, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Calibri");
+
+			SendMessage(GetDlgItem(hWnd, ENHANCED_STATIC), WM_SETFONT, (WPARAM)hFont, TRUE);
+			SendMessage(GetDlgItem(hWnd, ENHANCED_BUTTON), WM_SETFONT, (WPARAM)hFont, TRUE);
+			SendMessage(GetDlgItem(hWnd, ENHANCED_EDIT), WM_SETFONT, (WPARAM)hFont, TRUE);
 			
+		}
+		break;
+	// END WM_CREATE
+
+
+	case WM_PAINT:
+		{
+			PAINTSTRUCT ps;			
+
+			HDC hDC = BeginPaint(hWnd, &ps);
+
+				HBITMAP hBackgroundImg = (HBITMAP)LoadImage(NULL, L"circles_small.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				if (!hBackgroundImg)
+				{
+					MessageBox(hWnd,L"Err",L"Err",MB_OK);
+				}
+				HBITMAP hOldBm;
+
+				HDC hMemDC = CreateCompatibleDC(hDC);
+
+				hOldBm = (HBITMAP)SelectObject(hMemDC, hBackgroundImg);
+
+
+
+				BitBlt(hDC, 200, 0, 100,100, hMemDC, 0, 0, SRCCOPY);
+				BitBlt(hDC, 300, 0, 100,100, hMemDC, 0, 0, SRCCOPY);
+				BitBlt(hDC, 200, 100, 100,100, hMemDC, 0, 0, SRCCOPY);
+				BitBlt(hDC, 300, 100, 100,100, hMemDC, 0, 0, SRCCOPY);
+
+				SelectObject(hMemDC, hOldBm);
+				DeleteObject(hBackgroundImg);
+
+				DeleteDC(hMemDC);
+
+			EndPaint(hWnd, &ps);
 		}
 		break;
 
 
-	case WM_SETFONT:
-		SendMessage(GetDlgItem(hWnd, ENHANCED_STATIC), WM_SETFONT, wParam, lParam);
-		SendMessage(GetDlgItem(hWnd, ENHANCED_BUTTON), WM_SETFONT, wParam, lParam);;
-		SendMessage(GetDlgItem(hWnd, ENHANCED_EDIT), WM_SETFONT, wParam, lParam);
-		break;
 
 	case WM_COMMAND:
 		switch (HIWORD(wParam))
@@ -209,7 +232,43 @@ LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		break;
 	// END WM_COMMAND
 
-	case 
+
+	case WM_GETMINMAXINFO:
+		{
+			LPMINMAXINFO pMMInfo;
+			pMMInfo = (LPMINMAXINFO)lParam;
+
+			RECT rct;
+
+			// min size
+			rct.left = 0;
+			rct.top = 0;
+			rct.right = 400;
+			rct.bottom = 200;
+
+			AdjustWindowRectEx(&rct, WS_OVERLAPPEDWINDOW, FALSE, WS_EX_OVERLAPPEDWINDOW);
+
+			POINT minSize;
+			minSize.x = rct.right - rct.left;
+			minSize.y = rct.bottom - rct.top;
+
+			pMMInfo->ptMinTrackSize = minSize;
+
+			// max size
+			rct.left = 0;
+			rct.top = 0;
+			rct.right = 800;
+			rct.bottom = 400;
+
+			AdjustWindowRectEx(&rct, WS_OVERLAPPEDWINDOW, FALSE, WS_EX_OVERLAPPEDWINDOW);
+
+			POINT maxSize;
+			maxSize.x = rct.right - rct.left;
+			maxSize.y = rct.bottom - rct.top;
+
+			pMMInfo->ptMaxTrackSize = maxSize;
+		}
+		break;
 
 
 	case WM_CLOSE:
@@ -220,8 +279,8 @@ LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		break;
 
 	case WM_DESTROY:
-		PostQuitMessage(0);
-		
+		DeleteObject(hFont);
+		PostQuitMessage(0);		
 		break;
 
 
