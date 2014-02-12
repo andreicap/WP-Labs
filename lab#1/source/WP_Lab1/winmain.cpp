@@ -38,6 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 
 	cout << "DevConsole initialized" << endl;
 
+
 	if (!RegisterMainWindow(hInstance, mainWinClassName))
 	{
 		MessageBox(NULL, L"Could not register window class!", L"Error!", MB_OK|MB_ICONERROR);
@@ -136,7 +137,7 @@ LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 							hWnd, (HMENU)ENHANCED_BUTTON, hInctance, NULL);
 
 
-			CreateWindowEx(WS_EX_STATICEDGE,
+			CreateWindowEx(WS_EX_CLIENTEDGE,
 							L"EDIT", L"",
 							WS_CHILD|WS_VISIBLE,
 							220, 130, 150, 23,
@@ -171,12 +172,25 @@ LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 				hOldBm = (HBITMAP)SelectObject(hMemDC, hBackgroundImg);
 
+				RECT rct;
 
+				GetClientRect(hWnd, &rct);
+				
 
-				BitBlt(hDC, 200, 0, 100,100, hMemDC, 0, 0, SRCCOPY);
-				BitBlt(hDC, 300, 0, 100,100, hMemDC, 0, 0, SRCCOPY);
-				BitBlt(hDC, 200, 100, 100,100, hMemDC, 0, 0, SRCCOPY);
-				BitBlt(hDC, 300, 100, 100,100, hMemDC, 0, 0, SRCCOPY);
+				LONG width = rct.right - rct.left;
+				LONG height = rct.bottom - rct.top;
+
+				LONG x = width/2;
+				while (x < width)
+				{
+					LONG y = 0;
+					while (y < height)
+					{
+						BitBlt(hDC, x, y, 100,100, hMemDC, 0, 0, SRCCOPY);
+						y += 100;
+					}
+					x += 100;
+				}
 
 				SelectObject(hMemDC, hOldBm);
 				DeleteObject(hBackgroundImg);
@@ -231,6 +245,16 @@ LRESULT CALLBACK MainWinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		}
 		break;
 	// END WM_COMMAND
+
+
+	case WM_SIZE:
+		{
+			int x = LOWORD(lParam)/2 + 20;
+			SetWindowPos(GetDlgItem(hWnd, ENHANCED_STATIC), HWND_TOP, x, 20, 0, 0, SWP_NOSIZE);
+			SetWindowPos(GetDlgItem(hWnd, ENHANCED_BUTTON), HWND_TOP, x, 70, 0, 0, SWP_NOSIZE);
+			SetWindowPos(GetDlgItem(hWnd, ENHANCED_EDIT), HWND_TOP, x, 130, 0, 0, SWP_NOSIZE);
+		}
+		break;
 
 
 	case WM_GETMINMAXINFO:
