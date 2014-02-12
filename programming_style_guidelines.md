@@ -11,17 +11,17 @@ Overall the code is written in CamelCase without the use of Hungarian notation e
 
 Names should be meaningfull but not too long, short names are alowed for variables with small scope like counters in a loop, or for things like a `PAINTSTRUCT ps;` that will be used to fill the structure and send it in `BeginPaint( ... )` in the next couple of lines.
 
-* _globals_ should be prefixed with 'g_' and must be used with caution (preferably they should not exceed the file scope)
+* `globals` should be prefixed with 'g_' and must be used with caution (preferably they should not exceed the file scope)
 
-* _static_ function variables should be prefixed with 's_'
+* `static` function variables should be prefixed with 's_'
 
-* _class members_, static and non-static, should NOT be prefixed with 'm_' or 's_'
+* `class members`, static and non-static, should NOT be prefixed with 'm_' or 's_'
 
-* _variable_ names - camelCase starting with a lowercase letter
+* `variable` names - camelCase starting with a lowercase letter
 
-* _function_ and _class_ names - CamelCase starting with a capital letter
+* `function` and _class_ names - CamelCase starting with a capital letter
 
-* _#define_'s - SNAKE_CASE, all caps
+* `#define`'s - SNAKE_CASE, all caps
 
 
 
@@ -29,9 +29,9 @@ Names should be meaningfull but not too long, short names are alowed for variabl
 
 * Indent with tabs of size 4
 
-* ALWAYS use braces in cases like _if_'s with one statement
+* ALWAYS use braces in cases like `if`'s with one statement
 
-* For _if_'s with one short statement it is possible to use the following:
+* For `if`'s with one short statement it is possible to use the following:
 ```
 if (condition) { SomeFunction(); }
 ```
@@ -49,5 +49,5 @@ if (condition)
 
 * ~~goto~~
 
-* Use prefix increment/decrement (`++i`) operators instead of postfix (`i++`), except of special cases
+* Use prefix increment/decrement (`++i`) operators instead of postfix (`i++`), except for special cases
 
